@@ -3,6 +3,7 @@ class FormProcessor
 {
 
     protected $validator;
+    
 
     public function __construct(Validator $validator)
     {
@@ -18,13 +19,6 @@ class FormProcessor
         if ($this->validator->isValid()) {
             // Process valid form data (e.g., save to database)
             echo "Form submitted successfully!";
-        } else {
-            // Display error messages
-            $errors = $this->validator->getErrors();
-            echo "Please fix the following errors:";
-            foreach ($errors as $error) {
-                echo "<li>$error</li>";
-            }
         }
     }
 }
