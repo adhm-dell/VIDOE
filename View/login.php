@@ -1,13 +1,17 @@
 <?php
 require_once '../Controllers/Validator.php';
 require_once '../Controllers/FormProcessor.php';
-$requireFields = ['mobile_number', 'password', 'sign_in'];
+$requireFields = ['mobile_number', 'password'];
 $validator = new Validator();
 $processor = new FormProcessor($validator);
+$errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    $processor->handleFormSubmission($_POST, $requireFields);
+   $errors = $validator->getErrors();
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    <!-- Owl Carousel -->
    <link rel="stylesheet" href="vendor/owl-carousel/owl.carousel.css">
    <link rel="stylesheet" href="vendor/owl-carousel/owl.theme.css">
+   <style>
+      .error-message{
+         color: red;
+         font-size: 0.8rem;
+         margin-top: 0.5rem;
+      }
+   </style>
 </head>
 
 <body class="login-main-body">
@@ -47,10 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                      <div class="form-group">
                         <label>Mobile number</label>
                         <input type="text" name="mobile_number" class="form-control" placeholder="Enter mobile number">
+                        <span class="error-message"><?php if(isset($errors["mobile_number"])){echo $errors["mobile_number"];} ?></span>
                      </div>
                      <div class="form-group">
                         <label>Password</label>
                         <input type="password" name="password" class="form-control" placeholder="Password">
+                        <span class="error-message"><?php if(isset($errors["password"])){echo $errors["password"];} ?></span>
                      </div>
                      <div class="mt-4">
                         <div class="row">
