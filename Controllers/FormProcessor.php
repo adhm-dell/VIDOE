@@ -2,8 +2,8 @@
 class FormProcessor
 {
 
-    protected $validator;
-    
+    private $validator;
+
 
     public function __construct(Validator $validator)
     {
