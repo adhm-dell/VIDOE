@@ -4,7 +4,7 @@ class DBController
     private string $dbHost = 'localhost';
     private string $dbUser = 'root';
     private string $dbPass = '';
-    private string $dbName = 'add your db name';
+    private string $dbName = 'vidoe';
     private $conn;
 
     public function openConnection(): bool
