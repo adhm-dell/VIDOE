@@ -10,26 +10,27 @@ $errors = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    $processor->handleFormSubmission($_POST, $requireFields);
    $errors = $processor->getErrors();
-}
-if (!$errors) {
-   $user = new User();
-   if (preg_match("/@/", $_POST['username_or_email'])) {
-      $_POST['email'] = $_POST['username_or_email'];
-      unset($_POST['username_or_email']);
-      $user->setEmail($_POST['email']);
-   } else {
-      $_POST['username'] = $_POST['username_or_email'];
-      unset($_POST['username_or_email']);
-      $user->setUsername($_POST['username']);
+   if (!$errors) {
+      $user = new User();
+      if (preg_match("/@/", $_POST['username_or_email'])) {
+         $_POST['email'] = $_POST['username_or_email'];
+         unset($_POST['username_or_email']);
+         $user->setEmail($_POST['email']);
+      } else {
+         $_POST['username'] = $_POST['username_or_email'];
+         unset($_POST['username_or_email']);
+         $user->setUsername($_POST['username']);
+      }
+      $user->setPassword($_POST['password']);
+      $auth = new Auth();
+      if ($auth->login($user)) {
+         header('Location: index.php');
+      } else {
+         $errors = $auth->getErrors();
+      }
    }
-   $user->setPassword($_POST['password']);
-   $auth = new Auth();
-   if ($auth->login($user)) {
-      header('Location: index.php');
-   } else {
-      $errors = $auth->getErrors();
-   }
 }
+
 
 ?>
 <!DOCTYPE html>

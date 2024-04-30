@@ -8,6 +8,3 @@ if ($db->openConnection()) {
 } else {
     echo 'Connection failed';
 }
-
-session_start();
-echo $_SESSION['username'];
