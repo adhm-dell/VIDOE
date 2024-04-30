@@ -39,18 +39,60 @@ class Auth
                 $this->errors['username_or_email'] = 'Invalid username or email';
                 return false;
             }
+            $this->db->closeConnection();
         }
     }
     public function getErrors()
     {
         return $this->errors;
     }
-    public function register(User $user)
+    public function register(User $user): bool
     {
-        // implement this function
+        if ($this->db->openConnection()) {
+            $userData = [
+                "username" => $user->getUsername(),
+                "password" =>  $user->getPassword(),
+                "email" =>  $user->getEmail(),
+                "country" =>  $user->getCountry(),
+                "profile_pic" =>  $user->getPic()
+            ];
+            $insertionResult = $this->db->insert($userData, "users");
+            if ($insertionResult > 0) {
+                $whereClause = '(username=' . "'" . $user->getUsername() .
+                    "'" . 'and password=' . "'" . $user->getPassword() .
+                    "'" . 'and email=' . "'" . $user->getEmail() . "'" . ')';
+                $results = $this->db->select($whereClause, null, 1, 'users');
+                if (count($results) != 0) {
+                    session_start();
+                    $_SESSION['userid'] = $results[0]['id'];
+                    $_SESSION['username'] = $results[0]['username'];
+                    $_SESSION['email'] = $results[0]['email'];
+                    $_SESSION['country'] = $results[0]['country'];
+                    $_SESSION['profile_pic'] = $results[0]['profile_pic'];
+                    $_SESSION['channel_id'] = $results[0]['channel_id'];
+                    return true;
+                }
+            } else {
+                if ($user->getUsername() == "") {
+                    $this->errors['username'] = "Please enter a username";
+                }
+                if ($user->getPassword() == "") {
+                    $this->errors['password'] = "Please enter a password";
+                }
+                if ($user->getEmail() == "") {
+                    $this->errors['email'] = "Please enter an Email";
+                }
+                if ($user->getCountry() == "") {
+                    $this->errors['country'] = "Please enter your country";
+                }
+                return false;
+            }
+            $this->db->closeConnection();
+        }
     }
-    public function logout(User $user)
+    public function logout()
     {
-        // implement this function
+        session_destroy();
+        header("Location: ../View/login.php");
     }
 }

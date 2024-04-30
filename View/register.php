@@ -1,3 +1,38 @@
+<?php
+require_once '../Controllers/Validator.php';
+require_once '../Controllers/FormProcessor.php';
+require_once '../Controllers/Auth.php';
+require_once '../Models/User.php';
+$requiredFields = ['username', 'password', 'email', 'country'];
+$processor = new FormProcessor();
+$errors = array();
+$path = __DIR__ . "\\assets\\Profile pictures\\"  . $_FILES['pic']['name'];
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+   $processor->handleFormSubmission($_POST, $requiredFields);
+   $errors = $processor->getErrors();
+   if (!$errors) {
+      $user = new User();
+      $user->setUsername($_POST['username']);
+      $user->setPassword($_POST['password']);
+      $user->setEmail($_POST['email']);
+      $user->setCountry($_POST['country']);
+      if (isset($_FILES['pic'])) {
+         move_uploaded_file($_FILES['pic']['tmp_name'], $path);;
+         $user->setPic($_FILES['pic']['name']);
+      }
+      $auth = new Auth();
+      if ($auth->register($user)) {
+         header('Location: index.php');
+      } else {
+         $errors = $auth->getErrors();
+      }
+   }
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,6 +54,13 @@
    <!-- Owl Carousel -->
    <link rel="stylesheet" href="vendor/owl-carousel/owl.carousel.css">
    <link rel="stylesheet" href="vendor/owl-carousel/owl.theme.css">
+   <style>
+      .error-message {
+         color: red;
+         font-size: 0.8rem;
+         margin-top: 0.5rem;
+      }
+   </style>
 </head>
 
 <body class="login-main-body">
@@ -32,25 +74,45 @@
                      <h5 class="mt-3 mb-3">Welcome to Vidoe</h5>
                      <p>It is a long established fact that a reader <br> will be distracted by the readable.</p>
                   </div>
-                  <form action="#">
+                  <form action="register.php" method="post" enctype="multipart/form-data">
                      <div class="form-group">
-                        <label>Mobile number</label>
-                        <input type="text" class="form-control" placeholder="Enter mobile number">
+                        <label>Username</label>
+                        <input type="text" class="form-control" placeholder="Enter Usrername" name="username">
+                        <span class="error-message"><?php if (isset($errors["username"])) {
+                                                         echo $errors["username"];
+                                                      } ?></span>
                      </div>
                      <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Password" name="password">
+                        <span class="error-message"><?php if (isset($errors["password"])) {
+                                                         echo $errors["password"];
+                                                      } ?></span>
                      </div>
                      <div class="form-group">
-                        <label>Promocode</label>
-                        <input type="text" class="form-control" placeholder="Promocode">
+                        <label>email</label>
+                        <input type="text" class="form-control" placeholder="Enter email" name="email">
+                        <span class="error-message"><?php if (isset($errors["email"])) {
+                                                         echo $errors["email"];
+                                                      } ?></span>
+                     </div>
+                     <div class="form-group">
+                        <label>country</label>
+                        <input type="text" class="form-control" placeholder="Enter your country" name="country">
+                        <span class="error-message"><?php if (isset($errors["country"])) {
+                                                         echo $errors["country"];
+                                                      } ?></span>
+                     </div>
+                     <div class="form-group">
+                        <label>Profile picture</label>
+                        <input type="file" class="form-control" placeholder="Enter profile picture" name="pic">
                      </div>
                      <div class="mt-4">
                         <button type="submit" class="btn btn-outline-primary btn-block btn-lg">Sign Up</button>
                      </div>
                   </form>
                   <div class="text-center mt-5">
-                     <p class="light-gray">Already have an Account? <a href="login.html">Sign In</a></p>
+                     <p class="light-gray">Already have an Account? <a href="login.php">Sign In</a></p>
                   </div>
                </div>
             </div>
