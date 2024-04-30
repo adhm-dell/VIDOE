@@ -5,9 +5,8 @@ class Validator
 
     protected $errors = array();
 
-    function validateRequiredFields($data, $requiredFields)
+    function validateRequiredFields($data, $requiredFields): void
     {
-        // print_r($data);
         // Loop through required fields
         foreach ($requiredFields as $field) {
             if (empty($data[$field])) {
@@ -15,26 +14,26 @@ class Validator
             }
         }
     }
-    function validateWrongFields($data, $fields)
-    {
-        // handling selection from database and assign it to values
-        $values = [];
-        $this->errors = [];
-        foreach ($fields as $field => $fieldName) { // Use key => value for field name
-            $value = $values[$field]; // Access corresponding value from $values
+    // function validateWrongFields($data, $fields): void
+    // {
+    //     // handling selection from database and assign it to values
+    //     $values = [];
+    //     $this->errors = [];
+    //     foreach ($fields as $field => $fieldName) { // Use key => value for field name
+    //         $value = $values[$field]; // Access corresponding value from $values
 
-            if ($data[$fieldName] != $value) {
-                $this->errors[$fieldName] = "The $fieldName is wrong.";
-            }
-        }
-    }
+    //         if ($data[$fieldName] != $value) {
+    //             $this->errors[$fieldName] = "The $fieldName is wrong.";
+    //         }
+    //     }
+    // }
 
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
 
-    public function isValid()
+    public function isValid(): bool
     {
         return empty($this->errors);
     }

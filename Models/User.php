@@ -2,9 +2,9 @@
 
 class User
 {
-    private string $username;
+    private string $username = '';
     private string $password;
-    private string $email;
+    private string $email = '';
     private string $prifilePic;
     private int $id;
     private int $channel_id;
@@ -33,17 +33,24 @@ class User
     {
         $this->$channel_id = $channel_id;
     }
-    public function getUsername(): string
+    public function getUsername(): string | bool
     {
-        return $this->username;
+        if ($this->username) {
+            return $this->username;
+        } else {
+            return false;
+        }
     }
     public function getPassword(): string
     {
         return $this->password;
     }
-    public function getEmail(): string
+    public function getEmail(): string | bool
     {
-        return $this->email;
+        if ($this->email) {
+            return $this->email;
+        }
+        return false;
     }
     public function getPic(): string
     {

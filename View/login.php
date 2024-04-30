@@ -1,16 +1,35 @@
 <?php
 require_once '../Controllers/Validator.php';
 require_once '../Controllers/FormProcessor.php';
-$requireFields = ['mobile_number', 'password'];
-$validator = new Validator();
-$processor = new FormProcessor($validator);
+require_once '../Controllers/Auth.php';
+require_once '../Models/User.php';
+$requireFields = ['username_or_email', 'password'];
+$processor = new FormProcessor();
 $errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    $processor->handleFormSubmission($_POST, $requireFields);
-   $errors = $validator->getErrors();
+   $errors = $processor->getErrors();
 }
-
+if (!$errors) {
+   $user = new User();
+   if (preg_match("/@/", $_POST['username_or_email'])) {
+      $_POST['email'] = $_POST['username_or_email'];
+      unset($_POST['username_or_email']);
+      $user->setEmail($_POST['email']);
+   } else {
+      $_POST['username'] = $_POST['username_or_email'];
+      unset($_POST['username_or_email']);
+      $user->setUsername($_POST['username']);
+   }
+   $user->setPassword($_POST['password']);
+   $auth = new Auth();
+   if ($auth->login($user)) {
+      header('Location: index.php');
+   } else {
+      $errors = $auth->getErrors();
+   }
+}
 
 ?>
 <!DOCTYPE html>
@@ -35,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    <link rel="stylesheet" href="vendor/owl-carousel/owl.carousel.css">
    <link rel="stylesheet" href="vendor/owl-carousel/owl.theme.css">
    <style>
-      .error-message{
+      .error-message {
          color: red;
          font-size: 0.8rem;
          margin-top: 0.5rem;
@@ -56,14 +75,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   </div>
                   <form action="login.php" method="post">
                      <div class="form-group">
-                        <label>Mobile number</label>
-                        <input type="text" name="mobile_number" class="form-control" placeholder="Enter mobile number">
-                        <span class="error-message"><?php if(isset($errors["mobile_number"])){echo $errors["mobile_number"];} ?></span>
+                        <label>Username Or Email</label>
+                        <input type="text" name="username_or_email" class="form-control" placeholder="Enter Username Or Email">
+                        <span class="error-message"><?php if (isset($errors["username_or_email"])) {
+                                                         echo $errors["username_or_email"];
+                                                      } ?></span>
                      </div>
                      <div class="form-group">
                         <label>Password</label>
                         <input type="password" name="password" class="form-control" placeholder="Password">
-                        <span class="error-message"><?php if(isset($errors["password"])){echo $errors["password"];} ?></span>
+                        <span class="error-message"><?php if (isset($errors["password"])) {
+                                                         echo $errors["password"];
+                                                      } ?></span>
                      </div>
                      <div class="mt-4">
                         <div class="row">

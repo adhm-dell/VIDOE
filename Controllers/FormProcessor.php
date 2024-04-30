@@ -5,12 +5,12 @@ class FormProcessor
     private $validator;
 
 
-    public function __construct(Validator $validator)
+    public function __construct()
     {
-        $this->validator = $validator;
+        $this->validator = new Validator;
     }
 
-    public function handleFormSubmission($data, $requireFields)
+    public function handleFormSubmission($data, $requireFields): bool | array
     {
         $this->validator->validateRequiredFields($data, $requireFields);
 
@@ -18,7 +18,17 @@ class FormProcessor
 
         if ($this->validator->isValid()) {
             // Process valid form data (e.g., save to database)
-            echo "Form submitted successfully!";
+            return true;
+        } else {
+            return $this->validator->getErrors();
         }
+    }
+    public function getErrors(): array
+    {
+        return $this->validator->getErrors();
+    }
+    public function isValid(): bool
+    {
+        return $this->validator->isValid();
     }
 }
