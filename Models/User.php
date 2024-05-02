@@ -3,9 +3,10 @@
 class User
 {
     private string $username = '';
-    private string $password;
+    private string $password = '';
     private string $email = '';
-    private string $prifilePic;
+    private string $profilePic = '';
+    private string $country = '';
     private int $id;
     private int $channel_id;
 
@@ -21,9 +22,9 @@ class User
     {
         $this->email = $email;
     }
-    public function setPic(string $prifilePic): void
+    public function setPic(string $profilePic): void
     {
-        $this->prifilePic = $prifilePic;
+        $this->profilePic = $profilePic;
     }
     public function setId(int $id): void
     {
@@ -32,6 +33,10 @@ class User
     public function setChannel_Id(int $channel_id): void
     {
         $this->$channel_id = $channel_id;
+    }
+    public function setCountry(string $country): void
+    {
+        $this->$country = $country;
     }
     public function getUsername(): string | bool
     {
@@ -54,7 +59,7 @@ class User
     }
     public function getPic(): string
     {
-        return $this->prifilePic;
+        return $this->profilePic;
     }
     public function getId(): int
     {
@@ -63,5 +68,9 @@ class User
     public function getChannel_Id(): int
     {
         return $this->channel_id;
+    }
+    public function getCountry(): string
+    {
+        return $this->country;
     }
 }
