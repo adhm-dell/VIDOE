@@ -42,10 +42,13 @@ class Auth
             $this->db->closeConnection();
         }
     }
+    
     public function getErrors()
     {
         return $this->errors;
     }
+
+
     public function register(User $user): bool
     {
         if ($this->db->openConnection()) {
@@ -58,20 +61,14 @@ class Auth
             ];
             $insertionResult = $this->db->insert($userData, "users");
             if ($insertionResult > 0) {
-                $whereClause = '(username=' . "'" . $user->getUsername() .
-                    "'" . 'and password=' . "'" . $user->getPassword() .
-                    "'" . 'and email=' . "'" . $user->getEmail() . "'" . ')';
-                $results = $this->db->select($whereClause, null, 1, 'users');
-                if (count($results) != 0) {
-                    session_start();
-                    $_SESSION['userid'] = $results[0]['id'];
-                    $_SESSION['username'] = $results[0]['username'];
-                    $_SESSION['email'] = $results[0]['email'];
-                    $_SESSION['country'] = $results[0]['country'];
-                    $_SESSION['profile_pic'] = $results[0]['profile_pic'];
-                    $_SESSION['channel_id'] = $results[0]['channel_id'];
-                    return true;
-                }
+                $user->setId($insertionResult);
+                $_SESSION['userid'] = $user->getId();
+                $_SESSION['username'] = $user->getUsername();
+                $_SESSION['password'] = $user->getPassword();
+                $_SESSION['email'] = $user->getEmail();
+                $_SESSION['country'] = $user->getCountry();
+                $_SESSION['profile_pic'] = $user->getPic();
+                return true;
             } else {
                 if ($user->getUsername() == "") {
                     $this->errors['username'] = "Please enter a username";
@@ -95,4 +92,5 @@ class Auth
         session_destroy();
         header("Location: ../View/login.php");
     }
+
 }
