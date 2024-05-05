@@ -34,9 +34,9 @@ class User
     {
         $this->$channel_id = $channel_id;
     }
-    public function setCountry(string $country): void
+    public function setCountry(string $coun): void
     {
-        $this->$country = $country;
+        $this->country = $coun;
     }
     public function getUsername(): string | bool
     {

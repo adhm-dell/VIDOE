@@ -3,17 +3,16 @@
 class Video
 {
     private int $video_id;
-    private string $video_title;
-    private string $video_description;
-    private string $video_url;
-    private string $video_thumbnail;
+    private string $video_title = '';
+    private string $video_description = '';
+    private string $video_url = '';
+    private string $video_thumbnail = '';
+    private int $category_id = 0;
     private int $channel_id;
-    private int $user_id;
     private int $views;
     private int $likes; //need to be added in class diagram
-    private int $dislikes; //need to be added in class diagram
     private int $comments; //need to be added in class diagram
-    private int $duration; //need to be added in class diagram
+    // private int $duration; //need to be added in class diagram //! ???
     private string $created_at; //need to be added in class diagram
 
     public function setVideoId(int $video_id): void
@@ -46,11 +45,6 @@ class Video
         $this->channel_id = $channel_id;
     }
 
-    public function setUserId(int $user_id): void
-    {
-        $this->user_id = $user_id;
-    }
-
     public function setViews(int $views): void
     {
         $this->views = $views;
@@ -61,20 +55,20 @@ class Video
         $this->likes = $likes;
     }
 
-    public function setDislikes(int $dislikes): void
-    {
-        $this->dislikes = $dislikes;
-    }
-
     public function setComments(int $comments): void
     {
         $this->comments = $comments;
     }
 
-    public function setDuration(int $duration): void
+    public function setCategoryId(int $categoryId): void
     {
-        $this->duration = $duration;
+        $this->category_id = $categoryId;
     }
+
+    // public function setDuration(int $duration): void
+    // {
+    //     $this->duration = $duration;
+    // }
 
     public function setCreatedAt(string $created_at): void
     {
@@ -112,11 +106,6 @@ class Video
         return $this->channel_id;
     }
 
-    public function getUserId(): int
-    {
-        return $this->user_id;
-    }
-
     public function getViews(): int
     {
         return $this->views;
@@ -127,20 +116,20 @@ class Video
         return $this->likes;
     }
 
-    public function getDislikes(): int
-    {
-        return $this->dislikes;
-    }
-
     public function getComments(): int
     {
         return $this->comments;
     }
 
-    public function getDuration(): int
+    public function getCategoryId(): int
     {
-        return $this->duration;
+        return $this->category_id;
     }
+
+    // public function getDuration(): int
+    // {
+    //     return $this->duration;
+    // }
 
     public function getCreatedAt(): string
     {
