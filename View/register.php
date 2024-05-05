@@ -6,7 +6,6 @@ require_once '../Models/User.php';
 $requiredFields = ['username', 'password', 'email', 'country'];
 $processor = new FormProcessor();
 $errors = array();
-$path = __DIR__ . "\\assets\\Profile pictures\\"  . $_FILES['pic']['name'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    $processor->handleFormSubmission($_POST, $requiredFields);
@@ -18,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $user->setEmail($_POST['email']);
       $user->setCountry($_POST['country']);
       if (isset($_FILES['pic'])) {
+         $path = __DIR__ . "\\assets\\Profile pictures\\"  . $_FILES['pic']['name'];
          move_uploaded_file($_FILES['pic']['tmp_name'], $path);;
          $user->setPic($_FILES['pic']['name']);
       }
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                      </div>
                      <div class="form-group">
                         <label>Profile picture</label>
-                        <input type="file" class="form-control" placeholder="Enter profile picture" name="pic">
+                        <input type="file" class="form-control" placeholder="Enter profile picture" name="pic" class="form-control"/>
                      </div>
                      <div class="mt-4">
                         <button type="submit" class="btn btn-outline-primary btn-block btn-lg">Sign Up</button>

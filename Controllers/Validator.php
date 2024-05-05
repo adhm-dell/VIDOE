@@ -16,7 +16,7 @@ class Validator
     }
     // function validateWrongFields($data, $fields): void
     // {
-    //     // handling selection from database and assign it to values
+    // handling selection from database and assign it to values
     //     $values = [];
     //     $this->errors = [];
     //     foreach ($fields as $field => $fieldName) { // Use key => value for field name
