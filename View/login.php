@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          unset($_POST['username_or_email']);
          $user->setUsername($_POST['username']);
       }
-      $user->setPassword($_POST['password']);
+      $user->setPassword(sha1($_POST['password']));
       $auth = new Auth();
       if ($auth->login($user)) {
          header('Location: index.php');

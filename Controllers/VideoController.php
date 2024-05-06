@@ -7,7 +7,8 @@ class VideoController
     private DBController $db;
     private $errors = [];
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->db = new DBController();
     }
 
@@ -21,42 +22,56 @@ class VideoController
         //implement this 
         return new Video();
     }
+    public function setVideoData(array $data): Video
+    {
+
+        $video = new Video();
+        $video->setVideoTitle($_POST['title']);
+        $video->setVideoDescription($_POST['description']);
+        $video->setViews(0);
+        $video->setLikes(0);
+        $video->setComments(0);
+        $video->setCategoryId((int) $_POST['category']);
+        return $video;
+    }
     public function createVideo(Video $video): bool
     {
-        if($this->db->openConnection()){
+        if ($this->db->openConnection()) {
             $video_data = [
                 "title" => $video->getVideoTitle(),
                 "descreption" => $video->getVideoDescription(),
-                "file_path" => $video->getVideoUrl(),
+                "upload_date" => date('Y-m-d'),
                 "thumbnail" => $video->getVideoThumbnail(),
+                "file_path" => $video->getVideoUrl(),
+                "channel_id" => $video->getChannelId(),
                 "category_id" => $video->getCategoryId(),
                 "watches" => 0,
                 "num_of_reports" => 0
             ];
             $insertion_id = $this->db->insert($video_data, "video");
-            if($insertion_id > 0){
-                $video->setVideoId($insertion_id);
-                $_SESSION['videoid'] = $video->getVideoId();
-                $_SESSION['videoTitle'] = $video->getVideoTitle();
-                $_SESSION['videoDescription'] = $video->getVideoDescription();
-                $_SESSION['videoPath'] = $video->getVideoUrl();
-                $_SESSION['videoThumbnail'] = $video->getVideoThumbnail();
-                $_SESSION['videoCategory'] = $video->getCategoryId();
+            if ($insertion_id > 0) {
+                // $video->setVideoId($insertion_id);
+                // $_SESSION['videoid'] = $video->getVideoId();
+                // $_SESSION['videoTitle'] = $video->getVideoTitle();
+                // $_SESSION['videoDescription'] = $video->getVideoDescription();
+                // $_SESSION['videoPath'] = $video->getVideoUrl();
+                // $_SESSION['videoThumbnail'] = $video->getVideoThumbnail();
+                // $_SESSION['videoCategory'] = $video->getCategoryId();
                 return true;
-            }else{
-                if($video->getVideoTitle() == ''){
+            } else {
+                if ($video->getVideoTitle() == '') {
                     $this->errors['title'] = "Please enter a title for the video";
                 }
-                if($video->getVideoDescription() == ''){
+                if ($video->getVideoDescription() == '') {
                     $this->errors['description'] = "Please enter a description for the video";
                 }
-                if($video->getVideoUrl() == ''){
+                if ($video->getVideoUrl() == '') {
                     $this->errors['video'] = "Please upload a video";
                 }
-                if($video->getVideoThumbnail() == ''){
+                if ($video->getVideoThumbnail() == '') {
                     $this->errors['thumbnail'] = "Please upload a photo for the video";
                 }
-                if($video->getCategoryId() === 0){
+                if ($video->getCategoryId() === 0) {
                     $this->errors['category'] = "Please enter a category for the video";
                 }
                 return false;
@@ -95,7 +110,8 @@ class VideoController
         return [];
     }
 
-    public function getVideoErrors() : array{
+    public function getVideoErrors(): array
+    {
         return $this->errors;
     }
 }

@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    if (!$errors) {
       $user = new User();
       $user->setUsername($_POST['username']);
-      $user->setPassword($_POST['password']);
+      $user->setPassword(sha1($_POST['password']));
       $user->setEmail($_POST['email']);
       $user->setCountry($_POST['country']);
       if (isset($_FILES['pic'])) {
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                      </div>
                      <div class="form-group">
                         <label>Profile picture</label>
-                        <input type="file" class="form-control" placeholder="Enter profile picture" name="pic" class="form-control"/>
+                        <input type="file" class="form-control" placeholder="Enter profile picture" name="pic" class="form-control" />
                      </div>
                      <div class="mt-4">
                         <button type="submit" class="btn btn-outline-primary btn-block btn-lg">Sign Up</button>

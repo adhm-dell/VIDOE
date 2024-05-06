@@ -5,47 +5,33 @@ require_once '../Models/Video.php';
 require_once '../Controllers/VideoController.php';
 require_once '../Controllers/DBController.php';
 
-$requiredFields = ['title', 'description', 'category', 'thumbnail', 'video'];
+$requiredFields = ['title', 'description', 'category'];
 $processor = new FormProcessor();
 $errors = array();
 $db = new DBController();
 $uploadSuccess;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    $processor->handleFormSubmission($_POST, $requiredFields);
    $errors = $processor->getErrors();
-   if ($errors) {
-      $video = new Video();
-      $video->setVideoTitle($_POST['title']);
-      $video->setVideoDescription($_POST['description']);
-      $video->setViews(0);
-      $video->setLikes(0);
-      $video->setComments(0);
-      if (isset($_GET['category'])) {
-         $whereClause = '(username = ' . "'" . $_POST['category'] . "'" . ')';
-         $result = $db->select($whereClause, tableName: "category");
-         if ($result == []) {
-            $categoryData = [
-               "name" => $_POST['category']
-            ];
-            $db->insert($categoryData, "category");
-         } else {
-            $video->setCategoryId($result[0]['id']);
-         }
-      }
-      if (isset($_FILES['video']) && $_FILES['thumbnail']) {
-         $video_path = __DIR__ . "\\assets\\Videos\\"  . $_FILES['video']['name'];
-         $thumbnail_path = __DIR__ . "\\assets\\Thumbnails\\"  . $_FILES['thumbnail']['name'];
+   if (!$errors) {
+      $videoController = new VideoController();
+      $video = $videoController->setVideoData($_POST);
+      if ($_FILES['video']['tmp_name'] != '' && $_FILES['thumbnail'] != '') {
+         $video_path = __DIR__ . "\\assets\\Videos\\" .  uniqid() . $_FILES['video']['name'];
+         $thumbnail_path = __DIR__ . "\\assets\\Thumbnails\\" . uniqid() . $_FILES['thumbnail']['name'];
          move_uploaded_file($_FILES['video']['tmp_name'], $video_path);
          move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbnail_path);
          $video->setVideoThumbnail($thumbnail_path);
          $video->setVideoUrl($video_path);
-      }
-      $controller = new VideoController();
-      if ($controller->createVideo($video)) {
-         $uploadSuccess = "Video uploaded successfully";
+         if ($videoController->createVideo($video)) {
+            header('Location: index.php');
+         } else {
+            $errors = $videoController->getVideoErrors();
+         }
       } else {
-         $errors = $controller->getVideoErrors();
+         $errors['thumbnail'] = "Thumbnail is required";
+         $errors['video'] = "Video is required";
       }
    }
 }
@@ -262,7 +248,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                            <div class="col-lg-12">
                               <div class="form-group">
                                  <label for="e3">Category</label>
-                                 <input type="text" placeholder="Enter Video's Category" id="e3" class="form-control" name="category">
+                                 <select class="form-control" name="category">
+                                    <option value="1">Movie</option>
+                                    <option value="2">Music</option>
+                                    <option value="3">TV</option>
+                                 </select>
                                  <span class="error-message"><?php if (isset($errors["category"])) {
                                                                   echo $errors["category"];
                                                                } ?></span>

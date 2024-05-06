@@ -8,12 +8,11 @@ class Video
     private string $video_url = '';
     private string $video_thumbnail = '';
     private int $category_id = 0;
-    private int $channel_id;
+    private ?int $channel_id = null;
     private int $views;
     private int $likes; //need to be added in class diagram
     private int $comments; //need to be added in class diagram
-    // private int $duration; //need to be added in class diagram //! ???
-    private string $created_at; //need to be added in class diagram
+    private string $upload_date; //need to be added in class diagram
 
     public function setVideoId(int $video_id): void
     {
@@ -70,9 +69,9 @@ class Video
     //     $this->duration = $duration;
     // }
 
-    public function setCreatedAt(string $created_at): void
+    public function setCreatedAt(string $upload_date): void
     {
-        $this->created_at = $created_at;
+        $this->upload_date = $upload_date;
     }
 
     // getters
@@ -101,7 +100,7 @@ class Video
         return $this->video_thumbnail;
     }
 
-    public function getChannelId(): int
+    public function getChannelId(): int | null
     {
         return $this->channel_id;
     }
@@ -126,13 +125,8 @@ class Video
         return $this->category_id;
     }
 
-    // public function getDuration(): int
-    // {
-    //     return $this->duration;
-    // }
-
-    public function getCreatedAt(): string
+    public function getUploadDate(): string
     {
-        return $this->created_at;
+        return $this->upload_date;
     }
 }
