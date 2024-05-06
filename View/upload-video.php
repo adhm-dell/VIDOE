@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    if (!$errors) {
       $videoController = new VideoController();
       $video = $videoController->setVideoData($_POST);
-      if ($_FILES['video']['tmp_name'] != '' && $_FILES['thumbnail'] != '') {
+      if ($_FILES['video'] != '' && $_FILES['thumbnail'] != '') {
          $video_path = __DIR__ . "\\assets\\Videos\\" .  uniqid() . $_FILES['video']['name'];
          $thumbnail_path = __DIR__ . "\\assets\\Thumbnails\\" . uniqid() . $_FILES['thumbnail']['name'];
          move_uploaded_file($_FILES['video']['tmp_name'], $video_path);

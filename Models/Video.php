@@ -9,10 +9,11 @@ class Video
     private string $video_thumbnail = '';
     private int $category_id = 0;
     private ?int $channel_id = null;
-    private int $views;
-    private int $likes; //need to be added in class diagram
-    private int $comments; //need to be added in class diagram
+    private ?int $views;
+    private ?int $likes; //need to be added in class diagram
+    private ?int $comments; //need to be added in class diagram
     private string $upload_date; //need to be added in class diagram
+    private ?int $num_of_reports = 0;
 
     public function setVideoId(int $video_id): void
     {
@@ -39,39 +40,39 @@ class Video
         $this->video_thumbnail = $video_thumbnail;
     }
 
-    public function setChannelId(int $channel_id): void
+    public function setChannelId(?int $channel_id): void
     {
         $this->channel_id = $channel_id;
     }
 
-    public function setViews(int $views): void
+    public function setViews(?int $views): void
     {
         $this->views = $views;
     }
 
-    public function setLikes(int $likes): void
+    public function setLikes(?int $likes): void
     {
         $this->likes = $likes;
     }
 
-    public function setComments(int $comments): void
+    public function setComments(?int $comments): void
     {
         $this->comments = $comments;
     }
 
-    public function setCategoryId(int $categoryId): void
+    public function setCategoryId(?int $categoryId): void
     {
         $this->category_id = $categoryId;
     }
 
-    // public function setDuration(int $duration): void
-    // {
-    //     $this->duration = $duration;
-    // }
-
-    public function setCreatedAt(string $upload_date): void
+    public function setUploadDate(string $upload_date): void
     {
         $this->upload_date = $upload_date;
+    }
+
+    public function setNumOfReports(?int $num): void
+    {
+        $this->num_of_reports = $num;
     }
 
     // getters
@@ -128,5 +129,9 @@ class Video
     public function getUploadDate(): string
     {
         return $this->upload_date;
+    }
+    public function getNumOfReports(): int
+    {
+        return $this->num_of_reports;
     }
 }

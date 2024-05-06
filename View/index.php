@@ -1,10 +1,10 @@
 <?php
 require_once '../Controllers/DBController.php';
+require_once '../Controllers/VideoController.php';
 
-$db = new DBController;
 
-if ($db->openConnection()) {
-    echo 'Connection successful';
-} else {
-    echo 'Connection failed';
-}
+$controller = new VideoController();
+
+$name = $controller->searchVideo('te');
+
+var_dump($name);

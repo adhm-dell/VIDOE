@@ -12,15 +12,37 @@ class VideoController
         $this->db = new DBController();
     }
 
-    public function getAllVideos(): array
+    public function getAllVideos(): array | bool
     {
-        //implement this 
-        return [];
+        if ($this->db->openConnection()) {
+            $videos = $this->db->select('', '', '', 'video');
+            return $videos;
+        } else {
+            return false;
+        }
     }
     public function getVideoById(int $id): Video
     {
-        //implement this 
-        return new Video();
+        if ($this->db->openConnection()) {
+            $whereClause = '(id = ' . "'" . $id . "'" . ')';
+            $data = $this->db->select($whereClause, '', 1, 'video');
+            $video = new Video();
+            $video->setVideoId($data[0]['id']);
+            $video->setVideoTitle($data[0]['title']);
+            $video->setVideoDescription($data[0]['descreption']);
+            $video->setUploadDate($data[0]['upload_date']);
+            $video->setVideoThumbnail($data[0]['thumbnail']);
+            $video->setVideoUrl($data[0]['file_path']);
+            $video->setChannelId($data[0]['channel_id']);
+            $video->setViews($data[0]['watches']);
+            // $video->setLikes($data[0]['likes']);
+            // $video->setComments($data[0]['comments']);
+            $video->setCategoryId($data[0]['category_id']);
+            $video->setNumOfReports($data[0]['num_of_reports']);
+            return $video;
+        } else {
+            return false;
+        }
     }
     public function setVideoData(array $data): Video
     {
@@ -50,13 +72,6 @@ class VideoController
             ];
             $insertion_id = $this->db->insert($video_data, "video");
             if ($insertion_id > 0) {
-                // $video->setVideoId($insertion_id);
-                // $_SESSION['videoid'] = $video->getVideoId();
-                // $_SESSION['videoTitle'] = $video->getVideoTitle();
-                // $_SESSION['videoDescription'] = $video->getVideoDescription();
-                // $_SESSION['videoPath'] = $video->getVideoUrl();
-                // $_SESSION['videoThumbnail'] = $video->getVideoThumbnail();
-                // $_SESSION['videoCategory'] = $video->getCategoryId();
                 return true;
             } else {
                 if ($video->getVideoTitle() == '') {
@@ -81,18 +96,46 @@ class VideoController
     }
     public function deleteVideo(int $video_id): bool
     {
-        //implement this 
+        if ($this->db->openConnection()) {
+            $whereClause = '(id = ' . "'" . $video_id . "'" . ')';
+            $videoData = $this->db->select($whereClause, '', 1, 'video');
+            $thumbnail = $videoData[0]['thumbnail'];
+            $filePath = $videoData[0]['file_path'];
+            unlink($thumbnail);
+            unlink($filePath);
+            $this->db->delete($video_id, 'video');
+            return true;
+        }
         return false;
     }
-    public function searchVideo(string $video_name): Video
+    public function searchVideo(string $video_name): Video | array
     {
-        //implement this 
-        return new Video();
+        $data = self::getAllVideos();
+        $minDistance = PHP_INT_MAX; // Initialize with maximum integer value
+        $closestName = null;
+
+        foreach ($data as $name) {
+            $distance = levenshtein(strtolower($video_name), strtolower($name['title']));
+            $distances[$name['id']] = $distance;
+        }
+        asort($distances, SORT_NUMERIC);
+        foreach (array_keys($distances) as $id) {
+            if ($this->db->openConnection()) {
+                $whereClause = '(id = ' . "'" . $id . "'" . ')';
+                $videos[] = $this->db->select($whereClause, '', '1', 'video');
+            }
+        }
+        return $videos;
     }
     public function getChannelVidoes(int $channel_id): array
     {
-        //implement this 
-        return [];
+        if ($this->db->openConnection()) {
+            $whereClause = '(channel_id = ' . "'" . $channel_id . "'" . ')';
+            $videos = $this->db->select($whereClause, '', '', 'video');
+            return $videos;
+        } else {
+            return false;
+        }
     }
     public function handleChannelSubscribtions(int $channel_id, int $user_id): bool
     {
