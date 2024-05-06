@@ -111,8 +111,6 @@ class VideoController
     public function searchVideo(string $video_name): Video | array
     {
         $data = self::getAllVideos();
-        $minDistance = PHP_INT_MAX; // Initialize with maximum integer value
-        $closestName = null;
 
         foreach ($data as $name) {
             $distance = levenshtein(strtolower($video_name), strtolower($name['title']));
