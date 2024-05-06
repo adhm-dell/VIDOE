@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2024 at 08:15 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: May 06, 2024 at 04:01 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,6 +31,15 @@ CREATE TABLE `category` (
   `id` int(10) NOT NULL,
   `name` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `name`) VALUES
+(1, 'Movie'),
+(2, 'Music'),
+(3, 'TV');
 
 -- --------------------------------------------------------
 
@@ -114,6 +123,14 @@ CREATE TABLE `users` (
   `channel_id` int(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `country`, `profile_pic`, `channel_id`) VALUES
+(1, 'adhm_salah', '123456', 'adhmdoma11@gmail.com', 'egypt', '', NULL),
+(2, 'andrew', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'andrew@gmail.com', '', 'Rectangle 1 copy 4.png', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -127,11 +144,23 @@ CREATE TABLE `video` (
   `upload_date` date NOT NULL DEFAULT current_timestamp(),
   `thumbnail` varchar(100) DEFAULT NULL,
   `file_path` varchar(100) NOT NULL,
-  `channel_id` int(50) NOT NULL,
+  `channel_id` int(50) DEFAULT NULL,
   `watches` int(100) NOT NULL,
   `category_id` int(100) NOT NULL,
   `num_of_reports` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `video`
+--
+
+INSERT INTO `video` (`id`, `title`, `descreption`, `upload_date`, `thumbnail`, `file_path`, `channel_id`, `watches`, `category_id`, `num_of_reports`) VALUES
+(6, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663836c76a247Rectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663836c76a241videoplayback.mp4', NULL, 0, 1, 0),
+(7, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663837be3f64bRectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663837be3f645videoplayback.mp4', NULL, 0, 1, 0),
+(8, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663837d1a4719', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663837d1a4716videoplayback.mp4', NULL, 0, 1, 0),
+(9, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663837e549b6c', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663837e549b68', NULL, 0, 1, 0),
+(10, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663838e49db76', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663838e49db70', NULL, 0, 1, 0),
+(11, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\6638394e40e72Rectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\6638394e40e6dvideoplayback.mp4', NULL, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -259,7 +288,7 @@ ALTER TABLE `views`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `channel`
@@ -295,13 +324,13 @@ ALTER TABLE `playlist`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `video`
 --
 ALTER TABLE `video`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `views`
