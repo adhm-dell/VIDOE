@@ -8,8 +8,6 @@ require_once '../Controllers/DBController.php';
 $requiredFields = ['title', 'description', 'category'];
 $processor = new FormProcessor();
 $errors = array();
-$db = new DBController();
-$uploadSuccess;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    $processor->handleFormSubmission($_POST, $requiredFields);

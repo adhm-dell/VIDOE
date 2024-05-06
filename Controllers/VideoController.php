@@ -111,8 +111,6 @@ class VideoController
     public function searchVideo(string $video_name): Video | array
     {
         $data = self::getAllVideos();
-        $minDistance = PHP_INT_MAX; // Initialize with maximum integer value
-        $closestName = null;
 
         foreach ($data as $name) {
             $distance = levenshtein(strtolower($video_name), strtolower($name['title']));
@@ -127,26 +125,8 @@ class VideoController
         }
         return $videos;
     }
-    public function getChannelVidoes(int $channel_id): array
-    {
-        if ($this->db->openConnection()) {
-            $whereClause = '(channel_id = ' . "'" . $channel_id . "'" . ')';
-            $videos = $this->db->select($whereClause, '', '', 'video');
-            return $videos;
-        } else {
-            return false;
-        }
-    }
-    public function handleChannelSubscribtions(int $channel_id, int $user_id): bool
-    {
-        //implement this
-        return false;
-    }
-    public function handleChannelUnSubscribtions(int $channel_id, int $user_id): bool
-    {
-        //implement this
-        return false;
-    }
+    
+    
     public function getRelatedVideos(int $cat_id): array
     {
         //implement this 
