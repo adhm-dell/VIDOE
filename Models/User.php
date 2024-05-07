@@ -8,7 +8,7 @@ class User
     private string $profilePic = '';
     private string $country = '';
     private int $id;
-    private int $channel_id;
+    private int $channel_id = 0;
 
     public function setUsername(string $username): void
     {
