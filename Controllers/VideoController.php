@@ -108,10 +108,8 @@ class VideoController
         }
         return false;
     }
-    public function searchVideo(string $video_name): Video | array
+    public function searchVideo(string $video_name, $data): Video | array
     {
-        $data = self::getAllVideos();
-
         foreach ($data as $name) {
             $distance = levenshtein(strtolower($video_name), strtolower($name['title']));
             $distances[$name['id']] = $distance;
