@@ -32,10 +32,38 @@ class channelController
         return false;
     }
 
-    public function createChannel(): bool
+    public function createChannel(Channel $channel): bool
     {
-        //implement this
-        return false;
+        if($this->db->openConnection()){
+            $data = [
+                "name" => $channel->getName(),
+                "creation_date" => date('Y-m-d'),
+                "logo" => $channel->getLogo(),
+                "user_id" => $channel->getUserId(),
+                "subscribers" => $channel->getSubscriptions(),
+                "cover_photo" => $channel->getCoverPhoto()
+            ];
+            $insertionRes = $this->db->insert($data, "channel");
+            if ($insertionRes > 0){
+                $channel->setChannelId($insertionRes);
+                $this->db->closeConnection();
+                return true;
+            }else{
+                if($channel->getName() === ''){
+                    $this->errors['name'] = "Please enter a name for channel";
+                }
+                if($channel->getLogo() === ''){
+                    $this->errors['Logo'] = "Please enter a Logo for channel";
+                }
+                if($channel->getCoverPhoto() === ''){
+                    $this->errors['cover'] = "Please enter a cover photo for channel";
+                }
+                $this->db->closeConnection();
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 
     public function getErrors(): array

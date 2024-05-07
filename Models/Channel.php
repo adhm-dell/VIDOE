@@ -2,12 +2,12 @@
 
 class Channel
 {
-    private int $channel_id;
-    private int $user_id;
-    private string $name;
-    private string $logo;
-    private string $coverPhoto;
-    private int $subscriptions;
+    private int $channel_id = 0;
+    private int $user_id = 0;
+    private string $name = '';
+    private string $logo = '';
+    private string $coverPhoto = '';
+    private int $subscriptions = -1;
 
     public function setChannelId(int $id): void
     {
@@ -29,7 +29,7 @@ class Channel
     {
         $this->subscriptions = $subscriptions;
     }
-    public function setCoverPhoto(int $coverPhoto): void
+    public function setCoverPhoto(string $coverPhoto): void
     {
         $this->coverPhoto = $coverPhoto;
     }
@@ -53,7 +53,7 @@ class Channel
     {
         return $this->subscriptions;
     }
-    public function getCoverPhoto(): int
+    public function getCoverPhoto(): string
     {
         return $this->coverPhoto;
     }
