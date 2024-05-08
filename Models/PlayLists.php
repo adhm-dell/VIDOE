@@ -2,8 +2,9 @@
 
 class PlayLists
 {
-    private int $playlist_id;
-    private string $name;
+    private int $playlist_id = 0;
+    private string $name  = '';
+    private string $description = '';
     private int $user_id;
     private DateTime $creationDate;
 
@@ -11,7 +12,7 @@ class PlayLists
     {
         $this->playlist_id = $playlist_id;
     }
-    public function setPlaylist_name(int $playlist_name): void
+    public function setPlaylist_name(string $playlist_name): void
     {
         $this->name = $playlist_name;
     }
@@ -22,6 +23,10 @@ class PlayLists
     public function setCreationDate(DateTime $date): void
     {
         $this->creationDate = $date;
+    }
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
     }
     public function getPlaylist_id(): int
     {
@@ -38,5 +43,9 @@ class PlayLists
     public function getCreationDate(): DateTime
     {
         return $this->creationDate;
+    }
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 }

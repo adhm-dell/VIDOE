@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2024 at 04:01 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: May 08, 2024 at 05:55 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -51,10 +51,18 @@ CREATE TABLE `channel` (
   `id` int(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `creation_date` date NOT NULL DEFAULT current_timestamp(),
-  `logo` varchar(100) DEFAULT NULL,
+  `logo` varchar(100) DEFAULT 'C:\\xampp\\htdocs\\VIDOE\\View\\img\\default	',
   `user_id` int(100) NOT NULL,
-  `subscribers` int(100) NOT NULL
+  `subscribers` int(100) NOT NULL,
+  `cover_photo` varchar(200) DEFAULT 'C:\\xampp\\htdocs\\VIDOE\\View\\img\\default	'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `channel`
+--
+
+INSERT INTO `channel` (`id`, `name`, `creation_date`, `logo`, `user_id`, `subscribers`, `cover_photo`) VALUES
+(1, 'The Explainer', '2024-05-07', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\logo\\663a2ba557d69images.jpeg', 1, 0, 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\cover photos\\663a2ba557d65wallpapersden.com_76996-1920x1080.jpg');
 
 -- --------------------------------------------------------
 
@@ -103,8 +111,27 @@ CREATE TABLE `notification` (
 CREATE TABLE `playlist` (
   `id` int(10) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `description` varchar(500) NOT NULL,
   `user_id` int(50) NOT NULL,
   `creation_date` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `playlist`
+--
+
+INSERT INTO `playlist` (`id`, `name`, `description`, `user_id`, `creation_date`) VALUES
+(1, 'Mobiles', 'csacsacscdcsa', 1, '2024-05-07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subscriptions`
+--
+
+CREATE TABLE `subscriptions` (
+  `channel_id` int(50) NOT NULL,
+  `user_id` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -119,7 +146,7 @@ CREATE TABLE `users` (
   `password` varchar(50) NOT NULL,
   `email` varchar(30) NOT NULL,
   `country` varchar(20) NOT NULL,
-  `profile_pic` varchar(100) NOT NULL,
+  `profile_pic` varchar(100) NOT NULL DEFAULT 'C:\\xampp\\htdocs\\VIDOE\\View\\img\\default',
   `channel_id` int(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -244,6 +271,13 @@ ALTER TABLE `playlist`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `subscriptions`
+--
+ALTER TABLE `subscriptions`
+  ADD KEY `channel_id` (`channel_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -269,8 +303,8 @@ ALTER TABLE `video_category`
 -- Indexes for table `video_playlist`
 --
 ALTER TABLE `video_playlist`
-  ADD PRIMARY KEY (`playlist_id`),
-  ADD KEY `video_id` (`video_id`);
+  ADD KEY `video_id` (`video_id`),
+  ADD KEY `playlist_id` (`playlist_id`) USING BTREE;
 
 --
 -- Indexes for table `views`
@@ -294,7 +328,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `channel`
 --
 ALTER TABLE `channel`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `comment`
@@ -318,7 +352,7 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT for table `playlist`
 --
 ALTER TABLE `playlist`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -373,6 +407,13 @@ ALTER TABLE `notification`
 --
 ALTER TABLE `playlist`
   ADD CONSTRAINT `playlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `subscriptions`
+--
+ALTER TABLE `subscriptions`
+  ADD CONSTRAINT `subscriptions_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`),
+  ADD CONSTRAINT `subscriptions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `users`

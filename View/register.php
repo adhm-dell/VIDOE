@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       if (isset($_FILES['pic'])) {
          $path = __DIR__ . "\\assets\\Profile pictures\\"  . $_FILES['pic']['name'];
          move_uploaded_file($_FILES['pic']['tmp_name'], $path);;
-         $user->setPic($_FILES['pic']['name']);
+         $user->setPic($path);
       }
       $auth = new Auth();
       if ($auth->register($user)) {
