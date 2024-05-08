@@ -130,4 +130,15 @@ class DBController
         $stmt->close();
         return $count;
     }
+
+    public function Query($qry): bool
+    {
+        $result = $this->conn->query($qry);
+        if (!$result) {
+            echo "Error : " . mysqli_error($this->conn);
+            return false;
+        } else {
+            return $result;
+        }
+    }
 }

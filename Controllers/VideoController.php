@@ -46,7 +46,6 @@ class VideoController
     }
     public function setVideoData(array $data): Video
     {
-
         $video = new Video();
         $video->setVideoTitle($_POST['title']);
         $video->setVideoDescription($_POST['description']);
@@ -72,7 +71,15 @@ class VideoController
             ];
             $insertion_id = $this->db->insert($video_data, "video");
             if ($insertion_id > 0) {
-                return true;
+                $video->setVideoId($insertion_id);
+                $video_categoryData = [
+                    "video_id" => $video->getVideoId(),
+                    "category_id" => $video->getCategoryId()
+                ];
+                $res = $this->db->insert($video_categoryData, "video_category");
+                if ($res > 0){                    
+                    return true;
+                }
             } else {
                 if ($video->getVideoTitle() == '') {
                     $this->errors['title'] = "Please enter a title for the video";
@@ -104,9 +111,12 @@ class VideoController
             unlink($thumbnail);
             unlink($filePath);
             $this->db->delete($video_id, 'video');
+            $this->db->delete($video_id, 'video_playlist');
+            $this->db->delete($video_id, 'video_category');
             return true;
+        }else{
+            return false;
         }
-        return false;
     }
     public function searchVideo(string $video_name, $data): Video | array
     {

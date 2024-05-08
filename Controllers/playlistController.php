@@ -36,13 +36,12 @@ class playlistController
                 if($playlist->getDescription() == ''){
                     $this->errors['about'] = "please Enter playlist's description";
                 }
-                $this->db->closeConnection();
                 return false;
             }
         } else {
-            $this->db->closeConnection();
             return false;
         }
+        $this->db->closeConnection();
     }
 
     public function addVideosToPlaylist($playlist_id, $video_id): bool
@@ -52,12 +51,14 @@ class playlistController
                 "video_id" => $video_id,
                 "playlist_id" => $playlist_id
             ];
-            $this->db->insert($data, "video_playlist");
-            $this->db->closeConnection();
-            return true;
+            $res = $this->db->insert($data, "video_playlist");
+            if($res > 0) {
+                return true;
+            }
         }else{
             return false;
         }
+        $this->db->closeConnection();
     }
 
     public function deleteVideosFromPlaylist($video_id): bool
@@ -71,6 +72,22 @@ class playlistController
             }
             $this->db->closeConnection();
         }
+    }
+
+    public function deletePlaylist(int $playlist_id): bool
+    {
+        if($this->db->openConnection()){
+            $res = $this->db->delete($playlist_id, 'playlist');
+            $qry = "DELETE FROM `subscriptions` WHERE `playlist_id`". $playlist_id;
+            if($qry && $res > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+        $this->db->closeConnection();
     }
 
 }
