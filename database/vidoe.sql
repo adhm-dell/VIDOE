@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2024 at 05:55 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: May 09, 2024 at 07:34 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -62,21 +62,8 @@ CREATE TABLE `channel` (
 --
 
 INSERT INTO `channel` (`id`, `name`, `creation_date`, `logo`, `user_id`, `subscribers`, `cover_photo`) VALUES
-(1, 'The Explainer', '2024-05-07', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\logo\\663a2ba557d69images.jpeg', 1, 0, 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\cover photos\\663a2ba557d65wallpapersden.com_76996-1920x1080.jpg');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `comment`
---
-
-CREATE TABLE `comment` (
-  `id` int(100) NOT NULL,
-  `content` varchar(200) NOT NULL,
-  `creation_date` date NOT NULL DEFAULT current_timestamp(),
-  `user_id` int(100) NOT NULL,
-  `video_id` int(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(1, 'The Explainer', '2024-05-07', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\logo\\663a2ba557d69images.jpeg', 1, 0, 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\cover photos\\663a2ba557d65wallpapersden.com_76996-1920x1080.jpg'),
+(5, 'test', '2024-05-09', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\logo\\663c261c7ceda663beac74559a66384372d0e43Rectangle 1 copy 4.png', 5, 0, 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\cover photos\\663c261c7cecb663beac74559a66384372d0e43Rectangle 1 copy 4.png');
 
 -- --------------------------------------------------------
 
@@ -156,7 +143,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `country`, `profile_pic`, `channel_id`) VALUES
 (1, 'adhm_salah', '123456', 'adhmdoma11@gmail.com', 'egypt', '', NULL),
-(2, 'andrew', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'andrew@gmail.com', '', 'Rectangle 1 copy 4.png', NULL);
+(2, 'andrew', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'andrew@gmail.com', '', 'Rectangle 1 copy 4.png', NULL),
+(5, 'test', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', 'test@gmail.com', 'egypt', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Profile pictures\\', 5);
 
 -- --------------------------------------------------------
 
@@ -169,8 +157,8 @@ CREATE TABLE `video` (
   `title` varchar(100) NOT NULL,
   `descreption` text NOT NULL,
   `upload_date` date NOT NULL DEFAULT current_timestamp(),
-  `thumbnail` varchar(100) DEFAULT NULL,
-  `file_path` varchar(100) NOT NULL,
+  `thumbnail` varchar(1000) DEFAULT NULL,
+  `file_path` varchar(1000) NOT NULL,
   `channel_id` int(50) DEFAULT NULL,
   `watches` int(100) NOT NULL,
   `category_id` int(100) NOT NULL,
@@ -182,12 +170,8 @@ CREATE TABLE `video` (
 --
 
 INSERT INTO `video` (`id`, `title`, `descreption`, `upload_date`, `thumbnail`, `file_path`, `channel_id`, `watches`, `category_id`, `num_of_reports`) VALUES
-(6, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663836c76a247Rectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663836c76a241videoplayback.mp4', NULL, 0, 1, 0),
-(7, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663837be3f64bRectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663837be3f645videoplayback.mp4', NULL, 0, 1, 0),
-(8, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663837d1a4719', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663837d1a4716videoplayback.mp4', NULL, 0, 1, 0),
-(9, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663837e549b6c', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663837e549b68', NULL, 0, 1, 0),
-(10, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663838e49db76', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663838e49db70', NULL, 0, 1, 0),
-(11, 'test', 'test', '2024-05-06', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\6638394e40e72Rectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\6638394e40e6dvideoplayback.mp4', NULL, 0, 1, 0);
+(12, 'another test', 'test', '2024-05-08', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663bea6a0ad8e66384372d0e43Rectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663bea6a0ad8866384372d0e3dvideoplayback.mp4', 1, 0, 1, 0),
+(13, 'another test', 'test', '2024-05-08', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Thumbnails\\663beac74559a66384372d0e43Rectangle 1 copy 4.png', 'C:\\xampp\\htdocs\\VIDOE\\View\\assets\\Videos\\663beac74557766384372d0e3dvideoplayback.mp4', 1, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -199,6 +183,14 @@ CREATE TABLE `video_category` (
   `video_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `video_category`
+--
+
+INSERT INTO `video_category` (`video_id`, `category_id`) VALUES
+(12, 1),
+(13, 1);
 
 -- --------------------------------------------------------
 
@@ -239,14 +231,6 @@ ALTER TABLE `category`
 ALTER TABLE `channel`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `comment`
---
-ALTER TABLE `comment`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `video_id` (`video_id`);
 
 --
 -- Indexes for table `like`
@@ -328,13 +312,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `channel`
 --
 ALTER TABLE `channel`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `comment`
---
-ALTER TABLE `comment`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `like`
@@ -358,19 +336,19 @@ ALTER TABLE `playlist`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `video`
 --
 ALTER TABLE `video`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `views`
 --
 ALTER TABLE `views`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
@@ -380,74 +358,67 @@ ALTER TABLE `views`
 -- Constraints for table `channel`
 --
 ALTER TABLE `channel`
-  ADD CONSTRAINT `channel_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `comment`
---
-ALTER TABLE `comment`
-  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`);
+  ADD CONSTRAINT `channel_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `like`
 --
 ALTER TABLE `like`
-  ADD CONSTRAINT `like_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `like_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`);
+  ADD CONSTRAINT `like_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `like_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `notification`
 --
 ALTER TABLE `notification`
-  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `playlist`
 --
 ALTER TABLE `playlist`
-  ADD CONSTRAINT `playlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `playlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  ADD CONSTRAINT `subscriptions_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`),
-  ADD CONSTRAINT `subscriptions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `subscriptions_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `subscriptions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`);
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `video`
 --
 ALTER TABLE `video`
-  ADD CONSTRAINT `video_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`),
-  ADD CONSTRAINT `video_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+  ADD CONSTRAINT `video_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `video_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `video_category`
 --
 ALTER TABLE `video_category`
-  ADD CONSTRAINT `video_category_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  ADD CONSTRAINT `video_category_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`);
+  ADD CONSTRAINT `video_category_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `video_category_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `video_playlist`
 --
 ALTER TABLE `video_playlist`
-  ADD CONSTRAINT `video_playlist_ibfk_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`),
-  ADD CONSTRAINT `video_playlist_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`);
+  ADD CONSTRAINT `video_playlist_ibfk_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `video_playlist_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `views`
 --
 ALTER TABLE `views`
-  ADD CONSTRAINT `views_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `views_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`);
+  ADD CONSTRAINT `views_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `views_ibfk_2` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

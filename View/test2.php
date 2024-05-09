@@ -5,6 +5,6 @@ $db = new DBController();
 $db->openConnection();
 
 $controller = new VideoController();
-$videos = $controller->searchVideo('test');
+$videos = $controller->searchVideo('another test');
 
 print_r($videos);
