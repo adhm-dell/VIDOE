@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $playlist->setPlaylist_name($_POST['name']);
         $playlist->setDescription($_POST['about']);
         if ($controller->createPlaylist($playlist)) {
-            header("Location: playlist.php");
-        }else{
+            header("Location: playlists.php");
+        } else {
             $controller->getErrors();
         }
     }

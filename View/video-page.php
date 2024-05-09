@@ -68,6 +68,7 @@ $channel = $channelController->getChannelData($video->getChannelId());
                            <h6>About :</h6>
                            <p><?= $video->getVideoDescription() ?></p>
                         </div>
+                        <a href="http://localhost/Vidoe/View/playlists.php?id=<?= $video->getVideoId() ?>" class="btn btn btn-outline-danger" type="button"><i class="fas fa-save"></i></a>
                      </div>
                      <!-- end played video -->
                   </div>
