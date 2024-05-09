@@ -4,7 +4,6 @@ require_once '../Controllers/channelController.php';
 $videoController = new VideoController();
 $channelController = new channelController();
 $errors = [];
-print_r($_POST);
 if (isset($_GET['cat_id'])) {
     $videos = $videoController->getAllVideoByCategory($_GET['cat_id']);
 } else {
@@ -12,8 +11,11 @@ if (isset($_GET['cat_id'])) {
 }
 if (isset($_POST['search'])) {
     $data = $videoController->getAllVideos();
-    $videos = $videoController->searchVideo($_POST['search'], $data);
-    print_r($videos);
+    $videosFromSearchFunction = $videoController->searchVideo($_POST['search'], $data);
+    $videos = [];
+    foreach ($videosFromSearchFunction as $video) {
+        array_push($videos, $video[0]);
+    }
 } else {
     $videos = $videoController->getAllVideos();
 }

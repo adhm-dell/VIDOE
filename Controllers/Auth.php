@@ -62,6 +62,7 @@ class Auth
             $insertionResult = $this->db->insert($userData, "users");
             if ($insertionResult > 0) {
                 $user->setId($insertionResult);
+                session_start();
                 $_SESSION['userid'] = $user->getId();
                 $_SESSION['username'] = $user->getUsername();
                 $_SESSION['password'] = $user->getPassword();

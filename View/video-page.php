@@ -12,7 +12,7 @@ $channelController = new channelController;
 $video = $videoController->getVideoById($video_id);
 $category = $videoController->getVideoCategory($video->getCategoryId());
 $relatedVideos = $videoController->getRelatedVideos($video->getCategoryId(), $video_id);
-$channel = $channelController->getChannelData($_SESSION['channel_id']);
+$channel = $channelController->getChannelData($video->getChannelId());
 ?>
 <!DOCTYPE html>
 <html lang="en">

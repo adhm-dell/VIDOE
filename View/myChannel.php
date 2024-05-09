@@ -4,21 +4,26 @@ require_once '../Controllers/channelController.php';
 require_once '../Controllers/VideoController.php';
 session_start();
 $errors = [];
-if (!$_SESSION['channel_id']) {
-    header('Location: channelForm.php');
+print_r($_SESSION);
+if (!isset($_SESSION['userid'])) {
+    header('Location: login.php');
 } else {
-    $videoController = new VideoController();
-    $channelController = new channelController;
-    $channel = $channelController->getChannelData($_SESSION['channel_id']);
-    $channelVideos = $channelController->getChannelVidoes($_SESSION['channel_id']);
-    if (isset($_GET['video_id_']) && $_GET['video_id_'] != '') {
-        if ($videoController->deleteVideo($_GET['video_id_'])) {
-            header('Location: myChannel.php');
-        } else {
-            $errors['deleteError'] = 'this video cannot be deleted';
-        }
+    if (!$_SESSION['channel_id']) {
+        header('Location: channelForm.php');
     } else {
-        $errors['deleteError'] = 'something went wrong';
+        $videoController = new VideoController();
+        $channelController = new channelController;
+        $channel = $channelController->getChannelData($_SESSION['channel_id']);
+        $channelVideos = $channelController->getChannelVidoes($_SESSION['channel_id']);
+        if (isset($_GET['video_id_']) && $_GET['video_id_'] != '') {
+            if ($videoController->deleteVideo($_GET['video_id_'])) {
+                header('Location: myChannel.php');
+            } else {
+                $errors['deleteError'] = 'this video cannot be deleted';
+            }
+        } else {
+            $errors['deleteError'] = 'something went wrong';
+        }
     }
 }
 

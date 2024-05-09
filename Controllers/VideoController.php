@@ -149,13 +149,14 @@ class VideoController
 
         foreach ($data as $name) {
             $distance = levenshtein(strtolower($video_name), strtolower($name['title']));
-            $distances[$name['id']] = $distance;
+            $distances[$name['video_id']] = $distance;
         }
         asort($distances, SORT_NUMERIC);
+
         foreach (array_keys($distances) as $id) {
             if ($this->db->openConnection()) {
                 $whereClause = '(id = ' . "'" . $id . "'" . ')';
-                $videos[] = $this->db->select($whereClause, '', '1', 'video');
+                $videos[] = $this->db->select($whereClause, '', '', 'video');
             }
         }
         return $videos;

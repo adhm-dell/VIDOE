@@ -11,7 +11,7 @@ class channelController
         $this->db = new DBController();
     }
 
-    public function getChannelData(int $channel_id): array
+    public function getChannelData(int $channel_id): array | bool
     {
         if ($this->db->openConnection()) {
             $whereClause = '(id = ' . "'" . $channel_id . "'" . ')';

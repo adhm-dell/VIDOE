@@ -11,8 +11,7 @@ $errors = array();
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-   if (isset($_SESSION['channel_id']) && $_SESSION['channel_id'] != null) {
-
+   if (isset($_SESSION['channel_id']) && $_SESSION['channel_id'] != null && isset($_SESSION['userid'])) {
       $processor->handleFormSubmission($_POST, $requiredFields);
       $errors = $processor->getErrors();
       if (!$errors) {
