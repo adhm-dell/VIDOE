@@ -88,6 +88,25 @@ class Auth
             $this->db->closeConnection();
         }
     }
+
+    public function editAccount(User $user){
+        if($this->db->openConnection()){
+            $userData = [
+                "username" => $user->getUsername(),
+                "password" =>  $user->getPassword(),
+                "email" =>  $user->getEmail(),
+                "country" =>  $user->getCountry(),
+                "profile_pic" =>  $user->getPic()
+            ];
+            if($this->db->update($user->getId(), $userData, 'users')){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        $this->db->closeConnection();
+    }
+
     public function logout()
     {
         session_destroy();
