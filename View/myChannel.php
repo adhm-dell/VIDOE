@@ -1,10 +1,7 @@
-<?php 
-require_once "../Models/User.php";
+<?php
+session_start();
 
-
-$user = new User();
-
-if($user->getChannel_Id() === 0){
+if (!$_SESSION['channel_id']) {
     header('Location: channelForm.php');
 }
 

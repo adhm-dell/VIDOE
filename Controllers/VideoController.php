@@ -15,7 +15,7 @@ class VideoController
     public function getAllVideos(): array | bool
     {
         if ($this->db->openConnection()) {
-            $videos = $this->db->select('', '', '', 'video');
+            $videos = $this->db->selectWithInnerJoinThreeTables('', '', '', 'video_category', 'video', 'video_category.video_id=video.id', 'category', 'video_category.category_id = category.id');
             return $videos;
         } else {
             return false;
@@ -44,8 +44,18 @@ class VideoController
             return false;
         }
     }
+    public function getVideoCategory(int $cat_id): array
+    {
+        if ($this->db->openConnection()) {
+            $category = $this->db->select('(id = ' . "'" . $cat_id . "'" . ')', '', '', 'category');
+            return $category;
+        } else {
+            return false;
+        }
+    }
     public function setVideoData(array $data): Video
     {
+        session_start();
         $video = new Video();
         $video->setVideoTitle($_POST['title']);
         $video->setVideoDescription($_POST['description']);
@@ -53,6 +63,7 @@ class VideoController
         $video->setLikes(0);
         $video->setComments(0);
         $video->setCategoryId((int) $_POST['category']);
+        $video->setChannelId($_SESSION['channel_id']);
         return $video;
     }
     public function createVideo(Video $video): bool
@@ -77,7 +88,7 @@ class VideoController
                     "category_id" => $video->getCategoryId()
                 ];
                 $res = $this->db->insert($video_categoryData, "video_category");
-                if ($res > 0){                    
+                if ($res > 0) {
                     return true;
                 }
             } else {
@@ -100,6 +111,7 @@ class VideoController
             }
         }
         $this->db->closeConnection();
+        return true;
     }
     public function deleteVideo(int $video_id): bool
     {
@@ -114,7 +126,7 @@ class VideoController
             $this->db->delete($video_id, 'video_playlist');
             $this->db->delete($video_id, 'video_category');
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -133,12 +145,17 @@ class VideoController
         }
         return $videos;
     }
-    
-    
-    public function getRelatedVideos(int $cat_id): array
+
+
+    public function getRelatedVideos(int $cat_id, $vid_id): array
     {
-        //implement this 
-        return [];
+        if ($this->db->openConnection()) {
+            $whereClause = '(category_id = ' . "'" . $cat_id . "'" . 'and id !=' . "'" . $vid_id . "'" . ')';
+            $videos = $this->db->select($whereClause, '', '', 'video');
+            return $videos;
+        } else {
+            return false;
+        }
     }
 
     public function getVideoErrors(): array

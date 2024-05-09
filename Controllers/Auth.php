@@ -42,7 +42,7 @@ class Auth
             $this->db->closeConnection();
         }
     }
-    
+
     public function getErrors()
     {
         return $this->errors;
@@ -92,5 +92,4 @@ class Auth
         session_destroy();
         header("Location: ../View/login.php");
     }
-
 }

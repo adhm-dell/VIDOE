@@ -117,6 +117,66 @@ class DBController
         $stmt->close();
         return $data;
     }
+
+    public function selectWithInnerJoin($where = "", $order = "", $limit = "", $tableName, $joinTable, $joinCondition): array
+    {
+        $sql = "SELECT * FROM " . $tableName;
+        if ($joinTable && $joinCondition) {
+            $sql .= " INNER JOIN " . $joinTable . " ON " . $joinCondition;
+        }
+        if ($where) {
+            $sql .= " WHERE " . $where;
+        }
+        if ($order) {
+            $sql .= " ORDER BY " . $order;
+        }
+        if ($limit) {
+            $sql .= " LIMIT " . $limit;
+        }
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
+
+    public function selectWithInnerJoinThreeTables($where = null, $order = null, $limit = null, $tableName, $joinTable1, $joinCondition1, $joinTable2, $joinCondition2): array
+    {
+        $sql = "SELECT * FROM " . $tableName;
+        if ($joinTable1 && $joinCondition1) {
+            $sql .= " INNER JOIN " . $joinTable1 . " ON " . $joinCondition1;
+        }
+        if ($joinTable2 && $joinCondition2) {
+            $sql .= " INNER JOIN " . $joinTable2 . " ON " . $joinCondition2;
+        }
+        if ($where) {
+            $sql .= " WHERE " . $where;
+        }
+        if ($order) {
+            $sql .= " ORDER BY " . $order;
+        }
+        if ($limit) {
+            $sql .= " LIMIT " . $limit;
+        }
+
+        // ex: SELECT * FROM video_category INNER JOIN video ON video_category.video_id=video.id INNER JOIN category ON video_category.category_id = category.id
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
     public function count($tableName): int
     {
         $sql = "SELECT COUNT(*) FROM " . $tableName;

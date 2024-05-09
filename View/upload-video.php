@@ -8,29 +8,36 @@ require_once '../Controllers/DBController.php';
 $requiredFields = ['title', 'description', 'category'];
 $processor = new FormProcessor();
 $errors = array();
-
+session_start();
+echo 'session is'  . $_SESSION['channel_id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-   $processor->handleFormSubmission($_POST, $requiredFields);
-   $errors = $processor->getErrors();
-   if (!$errors) {
-      $videoController = new VideoController();
-      $video = $videoController->setVideoData($_POST);
-      if ($_FILES['video'] != '' && $_FILES['thumbnail'] != '') {
-         $video_path = __DIR__ . "\\assets\\Videos\\" .  uniqid() . $_FILES['video']['name'];
-         $thumbnail_path = __DIR__ . "\\assets\\Thumbnails\\" . uniqid() . $_FILES['thumbnail']['name'];
-         move_uploaded_file($_FILES['video']['tmp_name'], $video_path);
-         move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbnail_path);
-         $video->setVideoThumbnail($thumbnail_path);
-         $video->setVideoUrl($video_path);
-         if ($videoController->createVideo($video)) {
-            header('Location: index.php');
+
+   if (isset($_SESSION['channel_id']) && $_SESSION['channel_id'] != null) {
+
+      $processor->handleFormSubmission($_POST, $requiredFields);
+      $errors = $processor->getErrors();
+      if (!$errors) {
+         $videoController = new VideoController();
+         $video = $videoController->setVideoData($_POST);
+         if ($_FILES['video'] != '' && $_FILES['thumbnail'] != '') {
+            $video_path = __DIR__ . "\\assets\\Videos\\" .  uniqid() . $_FILES['video']['name'];
+            $thumbnail_path = __DIR__ . "\\assets\\Thumbnails\\" . uniqid() . $_FILES['thumbnail']['name'];
+            move_uploaded_file($_FILES['video']['tmp_name'], $video_path);
+            move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbnail_path);
+            $video->setVideoThumbnail($thumbnail_path);
+            $video->setVideoUrl($video_path);
+            if ($videoController->createVideo($video)) {
+               header('Location: index.php');
+            } else {
+               $errors = $videoController->getVideoErrors();
+            }
          } else {
-            $errors = $videoController->getVideoErrors();
+            $errors['thumbnail'] = "Thumbnail is required";
+            $errors['video'] = "Video is required";
          }
-      } else {
-         $errors['thumbnail'] = "Thumbnail is required";
-         $errors['video'] = "Video is required";
       }
+   } else {
+      header('Location: channelForm.php');
    }
 }
 

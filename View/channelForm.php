@@ -1,16 +1,16 @@
+<!-- الخطأ في السيشنس المتراكمة على بعضها -->
+
 <?php
 require_once '../Controllers/Validator.php';
 require_once '../Controllers/FormProcessor.php';
 require_once '../Controllers/Auth.php';
 require_once '../Models/channel.php';
-require_once '../Models/User.php';
 require_once '../Controllers/channelController.php';
+session_start();
 
 $requireFields = ['name'];
 $processor = new FormProcessor();
 $errors = array();
-$user = new User();
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $processor->handleFormSubmission($_POST, $requireFields);
     $errors = $processor->getErrors();
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $channel = new Channel();
         $controller = new channelController();
         $channel->setName($_POST['name']);
-        $channel->setUserId($user->getId());
+        $channel->setUserId($_SESSION['userid']);
         $channel->setSubscriptions(0);
         if ($_FILES['cover'] != '' && $_FILES['logo'] != '') {
             $coverPath = __DIR__ . "\\assets\\cover photos\\" .  uniqid() . $_FILES['cover']['name'];
