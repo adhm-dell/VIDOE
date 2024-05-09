@@ -1,15 +1,9 @@
 <?php
-require_once '../Controllers/VideoController.php';
-session_start();
-print_r($_SESSION);
-if (isset($_SESSION['userid'])) {
-   $videoController = new VideoController();
-   $historyVideos = $videoController->getHistory($_SESSION['userid']);
-} else {
-   header("Location: login.php");
-   exit();
-}
+require_once '../Controllers/channelController.php';
 
+$channelController = new channelController;
+
+$channels = $channelController->getAllChannels();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,30 +34,27 @@ if (isset($_SESSION['userid'])) {
       <!-- Sidebar -->
       <?php require_once './sidebar.php' ?>
       <div id="content-wrapper">
-         <div class="container-fluid">
+         <div class="container-fluid pb-0">
             <div class="video-block section-padding">
                <div class="row">
                   <div class="col-md-12">
                      <div class="main-title">
-                        <h6>Watch History</h6>
+                        <h6>Channels</h6>
                      </div>
                   </div>
-                  <?php foreach ($historyVideos as $video) : ?>
+                  <?php foreach ($channels as $channel) : ?>
                      <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="video-card history-video">
-                           <div class="video-card-image">
-                              <a class="play-icon" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>"><i class="fas fa-play-circle"></i></a>
-                              <a href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>"><img class="img-fluid" src="<?= "assets/Thumbnails/" . basename($video['thumbnail']) ?>" alt=""></a>
+                        <div class="channels-card">
+                           <div class="channels-card-image">
+                              <a href="http://localhost/Vidoe/View/single-channel.php?id=  <?= $channel['id'] ?>"><img class="img-fluid" src="<?= "assets/Logo/" . basename($channel['logo']) ?>" alt=""></a>
+                              <div class="channels-card-image-btn"><button type="button" class="btn btn-outline-danger btn-sm">Subscribe</button></div>
                            </div>
-                           <div class="video-card-body">
-                              <div class="video-title">
-                                 <a href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>"><?= $video['title'] ?></a>
+                           <div class="channels-card-body">
+                              <div class="channels-title">
+                                 <a href="http://localhost/Vidoe/View/single-channel.php?id= <?= $channel['id'] ?>"><?= $channel['name'] ?></a>
                               </div>
-                              <div class="video-page text-success">
-                                 <?= $videoController->getVideoCategory($video['category_id'])[0]['name'] ?> <a title="" data-placement="top" data-toggle="tooltip" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
-                              </div>
-                              <div class="video-view">
-                                 <?= $video['watches'] ?> views &nbsp;<i class="fas fa-calendar-alt"></i> <?= $video['upload_date'] ?>
+                              <div class="channels-view">
+                                 <?= $channel['subscribers'] ?>
                               </div>
                            </div>
                         </div>
@@ -71,6 +62,7 @@ if (isset($_SESSION['userid'])) {
                   <?php endforeach; ?>
                </div>
             </div>
+
          </div>
          <!-- /.container-fluid -->
          <!-- Sticky Footer -->

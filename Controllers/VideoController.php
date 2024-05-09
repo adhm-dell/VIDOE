@@ -21,6 +21,17 @@ class VideoController
             return false;
         }
     }
+    public function getAllVideoByCategory(int $cat_id): array
+    {
+        if ($this->db->openConnection()) {
+            $whereClause = '(category_id = ' . "'" . $cat_id . "'" . ')';
+            $videos = $this->db->select($whereClause, '', '', 'video');
+            return $videos;
+        } else {
+            $errors['invalid_cat_id'] = 'invalid category';
+            return false;
+        }
+    }
     public function getVideoById(int $id): Video
     {
         if ($this->db->openConnection()) {
@@ -130,8 +141,12 @@ class VideoController
             return false;
         }
     }
-    public function searchVideo(string $video_name, $data): Video | array
+    public function searchVideo(string $video_name): array
     {
+        $data = self::getAllVideos();
+        $minDistance = PHP_INT_MAX; // Initialize with maximum integer value
+        $closestName = null;
+
         foreach ($data as $name) {
             $distance = levenshtein(strtolower($video_name), strtolower($name['title']));
             $distances[$name['id']] = $distance;
@@ -185,6 +200,16 @@ class VideoController
         if ($this->db->openConnection()) {
             $data = $this->db->selectWithInnerJoin('(user_id =' . "'" . $user_id . "'" . ')', 'views.id DESC', '', 'views', 'video', 'views.video_id = video.id');
             return $data;
+            $this->db->closeConnection();
+        } else {
+            return false;
+        }
+    }
+    public function getAllCategories(): array
+    {
+        if ($this->db->openConnection()) {
+            $categories = $this->db->select('', '', '', 'category');
+            return $categories;
             $this->db->closeConnection();
         } else {
             return false;

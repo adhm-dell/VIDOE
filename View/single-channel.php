@@ -1,15 +1,10 @@
 <?php
+require_once '../Controllers/channelController.php';
 require_once '../Controllers/VideoController.php';
-session_start();
-print_r($_SESSION);
-if (isset($_SESSION['userid'])) {
-   $videoController = new VideoController();
-   $historyVideos = $videoController->getHistory($_SESSION['userid']);
-} else {
-   header("Location: login.php");
-   exit();
-}
-
+$videoController = new VideoController();
+$channelController = new channelController;
+$channel = $channelController->getChannelData($_GET['id']);
+$channelVideos = $channelController->getChannelVidoes($_GET['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,42 +34,51 @@ if (isset($_SESSION['userid'])) {
    <div id="wrapper">
       <!-- Sidebar -->
       <?php require_once './sidebar.php' ?>
-      <div id="content-wrapper">
+      <div class="single-channel-page" id="content-wrapper">
+         <div class="single-channel-image">
+            <img class="img-fluid" alt="" src="<?= "assets/cover photos/" . basename($channel[0]['cover_photo']) ?>" style="max-height: 20rem !important; object-fit: cover !important;">
+            <div class="channel-profile">
+               <img class="channel-profile-img" alt="" src="<?= "assets/Logo/" . basename($channel[0]['logo']) ?>">
+            </div>
+         </div>
+         <hr>
          <div class="container-fluid">
             <div class="video-block section-padding">
                <div class="row">
                   <div class="col-md-12">
                      <div class="main-title">
-                        <h6>Watch History</h6>
+                        <h6>Videos</h6>
                      </div>
                   </div>
-                  <?php foreach ($historyVideos as $video) : ?>
+                  <!-- start listing videos -->
+                  <?php foreach ($channelVideos as $video) : ?>
                      <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="video-card history-video">
+                        <div class="video-card">
                            <div class="video-card-image">
-                              <a class="play-icon" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>"><i class="fas fa-play-circle"></i></a>
-                              <a href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>"><img class="img-fluid" src="<?= "assets/Thumbnails/" . basename($video['thumbnail']) ?>" alt=""></a>
+                              <a class="play-icon" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['id'] ?>"><i class="fas fa-play-circle"></i></a>
+                              <a href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['id'] ?>"><img class="img-fluid" src="<?= "assets/Thumbnails/" . basename($video['thumbnail']) ?>" alt=""></a>
                            </div>
                            <div class="video-card-body">
                               <div class="video-title">
-                                 <a href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>"><?= $video['title'] ?></a>
+                                 <a href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['id'] ?>"><?= $video['title'] ?></a>
                               </div>
                               <div class="video-page text-success">
-                                 <?= $videoController->getVideoCategory($video['category_id'])[0]['name'] ?> <a title="" data-placement="top" data-toggle="tooltip" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['video_id'] ?>" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
+                                 <?= $videoController->getVideoCategory($video['category_id'])[0]['name'] ?> <a title="" data-placement="top" data-toggle="tooltip" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['id'] ?>" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
                               </div>
                               <div class="video-view">
-                                 <?= $video['watches'] ?> views &nbsp;<i class="fas fa-calendar-alt"></i> <?= $video['upload_date'] ?>
+                                 <?= $video['watches'] ?> &nbsp;<i class="fas fa-calendar-alt"></i> <?= $video['upload_date'] ?>
                               </div>
                            </div>
                         </div>
                      </div>
                   <?php endforeach; ?>
+                  <!-- ent listing videos -->
                </div>
             </div>
          </div>
          <!-- /.container-fluid -->
          <!-- Sticky Footer -->
-         <footer class="sticky-footer">
+         <footer class="sticky-footer ml-0">
             <div class="container">
                <div class="row no-gutters">
                   <div class="col-lg-6 col-sm-6">

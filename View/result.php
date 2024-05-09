@@ -1,31 +1,25 @@
 <?php
-require_once '../Controllers/channelController.php';
-require_once '../Controllers/channelController.php';
 require_once '../Controllers/VideoController.php';
-session_start();
+require_once '../Controllers/channelController.php';
+$videoController = new VideoController();
+$channelController = new channelController();
 $errors = [];
-if (!$_SESSION['channel_id']) {
-    header('Location: channelForm.php');
+print_r($_POST);
+if (isset($_GET['cat_id'])) {
+    $videos = $videoController->getAllVideoByCategory($_GET['cat_id']);
 } else {
-    $videoController = new VideoController();
-    $channelController = new channelController;
-    $channel = $channelController->getChannelData($_SESSION['channel_id']);
-    $channelVideos = $channelController->getChannelVidoes($_SESSION['channel_id']);
-    if (isset($_GET['video_id_']) && $_GET['video_id_'] != '') {
-        if ($videoController->deleteVideo($_GET['video_id_'])) {
-            header('Location: myChannel.php');
-        } else {
-            $errors['deleteError'] = 'this video cannot be deleted';
-        }
-    } else {
-        $errors['deleteError'] = 'something went wrong';
-    }
+    $errors = $videoController->getVideoErrors();
+}
+if (isset($_POST['search'])) {
+    $data = $videoController->getAllVideos();
+    $videos = $videoController->searchVideo($_POST['search'], $data);
+    print_r($videos);
+} else {
+    $videos = $videoController->getAllVideos();
 }
 
+$channels = $channelController->getAllChannels();
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,28 +48,37 @@ if (!$_SESSION['channel_id']) {
     <div id="wrapper">
         <!-- Sidebar -->
         <?php require_once './sidebar.php' ?>
-        <div class="single-channel-page" id="content-wrapper">
-            <div class="single-channel-image">
-                <img class="img-fluid" alt="" src="<?= "assets/cover photos/" . basename($channel[0]['cover_photo']) ?>" style="max-height: 20rem !important; object-fit: cover !important;">
-                <div class="channel-profile">
-                    <img class="channel-profile-img" alt="" src="<?= "assets/Logo/" . basename($channel[0]['logo']) ?>">
+        <div id="content-wrapper">
+            <div class="container-fluid pb-0">
+                <div class="top-mobile-search">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="mobile-search">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search for..." class="form-control">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-dark"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <hr>
-            <div class="container-fluid">
+                <!-- video -->
+                <span class="error-message"><?php if (isset($errors["invalid_cat_id"])) {
+                                                echo $errors["invalid_cat_id"];
+                                            } ?></span>
                 <div class="video-block section-padding">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-title">
-                                <h6>Videos</h6>
+                                <h6>Featured Videos</h6>
                             </div>
                         </div>
-                        <!-- start listing videos -->
-                        <?php foreach ($channelVideos as $video) : ?>
+                        <?php foreach ($videos as $video) : ?>
                             <div class="col-xl-3 col-sm-6 mb-3">
                                 <div class="video-card">
                                     <div class="video-card-image">
-                                        <a class="video-close" href="http://localhost/Vidoe/View/myChannel.php?video_id = <?= $video['id'] ?>"><i class="fas fa-trash"></i></a>
                                         <a class="play-icon" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['id'] ?>"><i class="fas fa-play-circle"></i></a>
                                         <a href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['id'] ?>"><img class="img-fluid" src="<?= "assets/Thumbnails/" . basename($video['thumbnail']) ?>" alt=""></a>
                                     </div>
@@ -87,27 +90,53 @@ if (!$_SESSION['channel_id']) {
                                             <?= $videoController->getVideoCategory($video['category_id'])[0]['name'] ?> <a title="" data-placement="top" data-toggle="tooltip" href="http://localhost/Vidoe/View/video-page.php?id=<?= $video['id'] ?>" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
                                         </div>
                                         <div class="video-view">
-                                            <?= $video['watches'] ?> &nbsp;<i class="fas fa-calendar-alt"></i> <?= $video['upload_date'] ?>
+                                            <?= number_format($video['watches'], 0) ?> views &nbsp;<i class="fas fa-calendar-alt"></i> <?= $video['upload_date'] ?>
                                         </div>
                                     </div>
-                                    <span class="error-message"><?php if (isset($errors["deleteError"])) {
-                                                                    echo $errors["deleteError"];
-                                                                } ?></span>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                        <!-- ent listing videos -->
+                    </div>
+                </div>
+                <!-- /video -->
+                <hr class="mt-0">
+                <!-- pupular channels -->
+                <div class="video-block section-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="main-title">
+                                <h6>Popular Channels</h6>
+                            </div>
+                        </div>
+                        <?php foreach ($channels as $channel) : ?>
+                            <div class="col-xl-3 col-sm-6 mb-3">
+                                <div class="channels-card">
+                                    <div class="channels-card-image">
+                                        <a href="#"><img class="img-fluid" src="<?= "assets/Logo/" . basename($channel['logo']) ?>" alt=""></a>
+                                        <div class="channels-card-image-btn"><button type="button" class="btn btn-outline-danger btn-sm">Subscribe</button></div>
+                                    </div>
+                                    <div class="channels-card-body">
+                                        <div class="channels-title">
+                                            <a href="#"><?= $channel['name'] ?></a>
+                                        </div>
+                                        <div class="channels-view">
+                                            <?= $channel['subscribers'] ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
             <!-- /.container-fluid -->
             <!-- Sticky Footer -->
-            <footer class="sticky-footer ml-0">
+            <footer class="sticky-footer">
                 <div class="container">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
                             <p class="mt-1 mb-0"><strong class="text-dark">Vidoe</strong>.
-                                <small class="mt-0 mb-0"><a class="text-primary" target="_blank" href="https://templatespoint.net/">TemplatesPoint</a>
+                                <small class="mt-0 mb-0"><a class="text-primary" target="_blank" href="https://www.templatespoint.net/">Templates Point</a>
                                 </small>
                             </p>
                         </div>

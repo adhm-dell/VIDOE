@@ -1,4 +1,5 @@
 <?php
+require_once '../Controllers/DBController.php';
 
 class channelController
 {
