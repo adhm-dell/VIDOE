@@ -162,4 +162,32 @@ class VideoController
     {
         return $this->errors;
     }
+
+    public function setView(int $video_id, $user_id): bool
+    {
+        if ($this->db->openConnection()) {
+            $data = [
+                "video_id" => $video_id,
+                "user_id" => $user_id
+            ];
+            $insertion_id = $this->db->insert($data, 'views');
+            $video = $this->getVideoById($video_id);
+            $watches = $video->getViews() + 1;
+            $this->db->update($video_id, ['watches' => $watches], 'video');
+            return true;
+            $this->db->closeConnection();
+        } else {
+            return false;
+        }
+    }
+    public function getHistory(int $user_id): array
+    {
+        if ($this->db->openConnection()) {
+            $data = $this->db->selectWithInnerJoin('(user_id =' . "'" . $user_id . "'" . ')', 'views.id DESC', '', 'views', 'video', 'views.video_id = video.id');
+            return $data;
+            $this->db->closeConnection();
+        } else {
+            return false;
+        }
+    }
 }

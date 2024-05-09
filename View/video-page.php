@@ -5,6 +5,9 @@ require_once '../Controllers/DBController.php';
 session_start();
 $video_id = $_GET['id'];
 $videoController = new VideoController;
+if (isset($_SESSION['userid'])) {
+   $videoController->setView($video_id, $_SESSION['userid']);
+}
 $channelController = new channelController;
 $video = $videoController->getVideoById($video_id);
 $category = $videoController->getVideoCategory($video->getCategoryId());
